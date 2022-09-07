@@ -14,6 +14,7 @@ const Container = styled.div`
 `;
 const InnerColor = styled.div`
   height: 80px;
+  cursor: pointer;
   border-left: 1px solid black;
   border-bottom: 1px solid black;
   box-sizing: border-box;
@@ -48,7 +49,14 @@ export const Colors = ({ selectedColor, name }) => {
   ];
 
   const sendToFirebase = (color) => {
-    setColorWemos(color, name);
+    if (name == "wemosadmin") {
+      for (let i = 0; i < 20; i++) {
+        const nameDB = "wemos" + i;
+        setColorWemos(color, nameDB);
+      }
+    } else {
+      setColorWemos(color, name);
+    }
   };
 
   useEffect(() => {}, []);

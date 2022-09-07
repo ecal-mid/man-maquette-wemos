@@ -26,6 +26,7 @@ const InnerContainer = styled.div`
   align-items: center;
   cursor: pointer;
   border: 1px solid black;
+  border-right: none;
 `;
 
 export const Header = ({ name }) => {
@@ -50,11 +51,12 @@ export const Header = ({ name }) => {
             </InnerContainer>
           </Link>
           <InnerContainerTitle>
-            <h1>WEMOS {name}</h1>
+            {name == "admin" ? <h1>MASTER</h1> : <h1>WEMOS {name}</h1>}
           </InnerContainerTitle>
         </>
       ) : (
-        <h1>WEMOS CONTROL PLATFORM</h1>
+        ""
+        // <h1>CHOOSE </h1>
       )}
     </Container>
   );

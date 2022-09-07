@@ -6,7 +6,6 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   column-gap: 0.5rem;
-  row-gap: 0.5rem;
 `;
 
 export const ChooseWemos = ({ numOfWemos }) => {

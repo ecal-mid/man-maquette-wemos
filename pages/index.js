@@ -4,9 +4,7 @@ import { Header } from "../components/Header";
 import styles from "../styles/Home.module.css";
 import { initFirebase } from "../utils/Firebase";
 import styled from "styled-components";
-const Container = styled.div`
-  padding: 2rem;
-`;
+const Container = styled.div``;
 export default function Home() {
   initFirebase();
   const numOfWemos = 20;

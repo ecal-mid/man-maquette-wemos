@@ -11,12 +11,14 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   width: 20%;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid black;
   border-left: 1px solid black;
-  ${(props) => props.selectedIntensity ? (`background-color: black; color: white;`): ``}
+  ${(props) =>
+    props.selectedIntensity ? `background-color: black; color: white;` : ``}
   p {
     margin: 0;
     font-size: 3rem;
@@ -27,7 +29,14 @@ export const Intensity = ({ selectedIntensity, name, id }) => {
   const intensArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const sendToFirebase = (e) => {
     let num = e * 25;
-    setIntensity(num, name);
+    if (name == "wemosadmin") {
+      for (let i = 0; i < 20; i++) {
+        const nameDB = "wemos" + i;
+        setIntensity(num, nameDB);
+      }
+    } else {
+      setIntensity(num, name);
+    }
   };
   return (
     <Container>
