@@ -1,0 +1,271 @@
+
+#include <Arduino.h>
+#if defined(ESP32)
+#include <WiFi.h>
+#elif defined(ESP8266)
+#include <ESP8266WiFi.h>
+#endif
+#include <Firebase_ESP_Client.h>
+
+String numWemos = "15";
+
+// Provide the token generation process info.garamond
+#include "addons/TokenHelper.h"
+// Provide the RTDB payload printing info and other helper functions.
+#include "addons/RTDBHelper.h"
+
+// Insert your network credentials
+#define WIFI_SSID "ECALEVENT"
+#define WIFI_PASSWORD "garamond"
+#define API_KEY "AIzaSyAzg02dlE_kUnUay4ehOYZal_4CZ2umuVs"
+#define DATABASE_URL "https://wemosmaquette-default-rtdb.europe-west1.firebasedatabase.app"
+
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+
+#include <Adafruit_NeoPixel.h>
+#define PIN D4    // D2 for Wemos Mini Ws2812B 1 LED / D4 for 7 LED shield
+#define LED_NUM 7 // 1 for Wemos Mini Ws2812B 1 LED / 7 for 7 LED shield
+uint8 ledR;
+uint8 ledG;
+uint8 ledB;
+int led_intensity = 1;
+Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_NUM, PIN, NEO_GRB + NEO_KHZ800);
+
+unsigned long sendDataPrevMillis = 0;
+bool signupOK = false;
+
+String colorFeed = String("wemos" + numWemos + "/color");
+String powerFeed = String("wemos" + numWemos + "/power");
+String intensityFeed = String("wemos" + numWemos + "/intensity");
+String pulseFeed = String("wemos" + numWemos + "/pulse");
+
+String color = "white";
+int power = 0;
+int intensity = 10;
+int intensity_pulse = 0;
+int isPulsing = 0;
+
+void setup()
+{
+    Serial.begin(115200);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Serial.print("Connecting to Wi-Fi");
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        Serial.print(".");
+        delay(300);
+    }
+    Serial.println();
+    Serial.print("Connected with IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.println();
+
+    /* Assign the api key (required) */
+    config.api_key = API_KEY;
+
+    /* Assign the RTDB URL (required) */
+    config.database_url = DATABASE_URL;
+
+    /* Sign up */
+    if (Firebase.signUp(&config, &auth, "", ""))
+    {
+        Serial.println("ok");
+        signupOK = true;
+    }
+    else
+    {
+        Serial.printf("%s\n", config.signer.signupError.message.c_str());
+    }
+
+    /* Assign the callback function for the long running token generation task */
+    config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+
+    Firebase.begin(&config, &auth);
+    Firebase.reconnectWiFi(true);
+
+    /*LEDS CONFIGURE*/
+    leds.begin(); // This initializes the NeoPixel library.
+    leds.setPixelColor(0, leds.Color(random(255), random(255), random(255)));
+    leds.show();
+    led_set(0, 0, 0);
+}
+
+void led_set(uint8 R, uint8 G, uint8 B)
+{
+    ledR = R;
+    ledG = G;
+    ledB = B;
+
+    for (int i = 0; i < LED_NUM; i++)
+    {
+        leds.setPixelColor(i, leds.Color(R, G, B));
+        // leds.setPixelColor(i, leds.Color(G, R, B));
+        leds.show();
+        delay(50);
+    }
+}
+
+void loop()
+{
+
+    if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 500 || sendDataPrevMillis == 0))
+    {
+        sendDataPrevMillis = millis();
+
+        // COLOR FEED
+        if (Firebase.RTDB.getString(&fbdo, colorFeed))
+        {
+            if (fbdo.dataType() == "string")
+            {
+                String e = fbdo.stringData();
+                if (color != e)
+                {
+                    color = fbdo.stringData();
+                    Serial.println(color);
+                    if (power == 1)
+                    {
+                        set_light(color);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Serial.println(fbdo.errorReason());
+        }
+
+        // POWER FEED
+        if (Firebase.RTDB.getInt(&fbdo, powerFeed))
+        {
+            if (fbdo.dataType() == "int")
+            {
+                int e = fbdo.intData();
+                if (power != e)
+                {
+                    power = e;
+                    Serial.println(power);
+                    if (power == 0)
+                    {
+                        Serial.println("POWER OFF");
+                        led_set(0, 0, 0);
+                    }
+                    else
+                    {
+                        Serial.println("POWER ON");
+                        set_light(color);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Serial.println(fbdo.errorReason());
+        }
+
+        // Intensity FEED
+        if (Firebase.RTDB.getInt(&fbdo, intensityFeed))
+        {
+            if (fbdo.dataType() == "int")
+            {
+                int e = fbdo.intData();
+                if (intensity != e)
+                {
+                    intensity = e;
+                    Serial.println("POWER ON");
+                    set_light(color);
+                }
+            }
+        }
+        else
+        {
+            Serial.println(fbdo.errorReason());
+        }
+
+        // PULSE FEED
+        if (Firebase.RTDB.getInt(&fbdo, pulseFeed))
+        {
+            if (fbdo.dataType() == "int")
+            {
+                int e = fbdo.intData();
+                if (isPulsing != e)
+                {
+                    isPulsing = e;
+                }
+            }
+        }
+        else
+        {
+            Serial.println(fbdo.errorReason());
+        }
+    }
+    if (isPulsing == 1)
+    {
+        pulseloop();
+    }
+}
+
+void set_light(String e)
+{
+    if (e == "red")
+    {
+        led_set(0, 0, 0);
+        led_set(intensity, 0, 0);
+    }
+    if (e == "blue")
+    {
+        led_set(0, 0, 0);
+        led_set(0, 0, intensity);
+    }
+    if (e == "green")
+    {
+        led_set(0, 0, 0);
+        led_set(0, intensity, 0);
+    }
+    if (e == "white")
+    {
+        led_set(0, 0, 0);
+        led_set(intensity, intensity, intensity);
+    }
+    if (e == "pink")
+    {
+        led_set(0, 0, 0);
+        led_set(intensity, 0, intensity / 2);
+    }
+    if (e == "yellow")
+    {
+        led_set(0, 0, 0);
+        led_set(intensity, intensity, 0);
+    }
+    if (e == "cyan")
+    {
+        led_set(0, 0, 0);
+        led_set(0, intensity, intensity);
+    }
+}
+
+void pulseloop()
+{
+
+    if (intensity_pulse > 250)
+    {
+        intensity_pulse = 0;
+    }
+    intensity_set(intensity_pulse);
+    intensity_pulse++;
+}
+
+void intensity_set(int I)
+{
+
+    uint8 R = ledR * I;
+    uint8 G = ledG * I;
+    uint8 B = ledB * I;
+    for (int i = 0; i < LED_NUM; i++)
+    {
+        leds.setPixelColor(i, leds.Color(R, G, B));
+        // leds.setPixelColor(i, leds.Color(G, R, B));
+        leds.show();
+    }
+}

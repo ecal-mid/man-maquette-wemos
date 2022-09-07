@@ -5,6 +5,7 @@ const Container = styled.div`
   display: flex;
   cursor: pointer;
   p {
+    line-height: 100%;
     padding-left: 0.5rem;
     font-size: 15vw;
     margin: 0;
