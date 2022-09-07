@@ -1,9 +1,31 @@
+@font-face {
+  font-family: 'riformaBold';
+  src: url('./../public/fonts/RiformaLL-Bold.otf') format('otf');
+  src: url('./../public/fonts/RiformaLL-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'UnicaMedium';
+  src: url('./../public/fonts/Unica77LL-Medium.otf') format('otf');
+  src: url('./../public/fonts/Unica77LL-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'UnicaBold';
+  src: url('./../public/fonts/Unica77LL-Bold.otf') format('otf');
+  src: url('./../public/fonts/Unica77LL-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'RiformaHeavy';
+  src: url('./../public/fonts/RiformaLL-Medium.otf') format('otf');
+  src: url('./../public/fonts/RiformaLL-Medium.woff') format('woff');
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -12,7 +34,9 @@ a {
 }
 
 * {
+  font-family: 'UnicaBold';
   box-sizing: border-box;
+  font-weight: unset;
 }
 
 @media (prefers-color-scheme: dark) {
