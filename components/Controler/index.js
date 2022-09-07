@@ -4,7 +4,7 @@ import app, {
   firebaseConfig,
   getWemosInitialValues,
   initFirebase,
-} from "../../utils/Firebase";
+} from "../../utils/firebase";
 import { Power } from "./Power";
 const Container = styled.div``;
 import { initializeApp } from "firebase/app";
