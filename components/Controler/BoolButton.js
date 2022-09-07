@@ -7,7 +7,7 @@ const Container = styled.div`
 `;
 
 const Text = styled.p`
-  font-size: 3.5rem;
+  font-size: 15vw;
   margin: 0;
   text-transform: uppercase;
 `;

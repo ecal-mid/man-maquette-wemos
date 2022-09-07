@@ -21,7 +21,7 @@ const InnerContainer = styled.div`
     props.selectedIntensity ? `background-color: black; color: white;` : ``}
   p {
     margin: 0;
-    font-size: 3rem;
+    font-size: 15vw;
   }
 `;
 
