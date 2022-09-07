@@ -2,22 +2,27 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { setColorWemos } from "../firebase";
 const OuterContainer = styled.div`
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 5vw;
+  padding-right: 5vw;
   border-left: 1px solid black;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
 `;
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
 `;
 const InnerColor = styled.div`
-  height: 80px;
+  height: 20vw;
+
   cursor: pointer;
   border-left: 1px solid black;
   border-bottom: 1px solid black;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${(props) => (props.color ? props.color : "blue")};
   border-right: ${(props) =>
     props.num == 3 || props.num == 7 ? "1px solid black" : "none"};
@@ -33,20 +38,26 @@ const InnerColor = styled.div`
       border-right: 1px solid black;
       `
       : ``};
+
+  ${(props) =>
+    props.num <= 3
+      ? `width:25%;
+          `
+      : `
+      width:33.333%;
+      `};
+`;
+
+const SelectedColContainer = styled.div`
+  height: 40px;
+  width: 40px;
+  background-color: black;
+  border-radius: 20px;
 `;
 
 export const Colors = ({ selectedColor, name }) => {
   console.log(selectedColor);
-  const colArr = [
-    "red",
-    "blue",
-    "green",
-    "yellow",
-    "pink",
-    "white",
-    "cyan",
-    "orange",
-  ];
+  const colArr = ["red", "blue", "green", "yellow", "pink", "white", "cyan"];
 
   const sendToFirebase = (color) => {
     if (name == "wemosadmin") {
@@ -71,7 +82,11 @@ export const Colors = ({ selectedColor, name }) => {
             key={color}
             color={color}
           >
-            {selectedColor == color ? <p>Selected</p> : ""}
+            {selectedColor == color ? (
+              <SelectedColContainer></SelectedColContainer>
+            ) : (
+              ""
+            )}
           </InnerColor>
         ))}
       </Container>
