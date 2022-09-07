@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { setIsPowered } from "../../utils/Firebase";
+import { setIsPowered } from "../firebase";
 import { BoolButton } from "./BoolButton";
 const Container = styled.div``;
 

@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import app, {
-  firebaseConfig,
-  getWemosInitialValues,
-  initFirebase,
-} from "../../utils/firebase";
+import app from "../firebase";
 import { Power } from "./Power";
 const Container = styled.div``;
 import { initializeApp } from "firebase/app";

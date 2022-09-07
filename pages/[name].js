@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Controler } from "../components/Controler";
 import { Header } from "../components/Header";
-import app, { firebaseConfig, getWemosInitialValues } from "../utils/Firebase";
+import app, { firebaseConfig, getWemosInitialValues } from "../components/firebase";
 import { getDatabase, ref } from "firebase/database";
 
 const Container = styled.div`

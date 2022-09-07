@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { setIntensity } from "../../utils/Firebase";
+import { setIntensity } from "../firebase";
 
 const Container = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { setColorWemos } from "../../utils/Firebase";
+import { setColorWemos } from "../firebase";
 const OuterContainer = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
