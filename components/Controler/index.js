@@ -13,43 +13,40 @@ import { Pulse } from "./Pulse";
 const database = getDatabase(app);
 
 export const Controler = ({ id, name, data }) => {
-  const [wemosVal, setWemosVal] = useState(null);
-  const [snapshots, loading, error] = useList(ref(database, name));
-  useEffect(() => {
-    console.log(wemosVal);
-  }, [wemosVal]);
+	const [wemosVal, setWemosVal] = useState(null);
+	const [snapshots, loading, error] = useList(ref(database, name));
 
-  useEffect(() => {
-    const obj = {};
-    for (let i in snapshots) {
-      if (typeof snapshots[i].key != "undefined") {
-        obj[snapshots[i].key] = snapshots[i]._node.value_;
-      }
-    }
-    setWemosVal(obj);
-  }, [snapshots]);
-  return (
-    <Container>
-      {wemosVal != null ? (
-        <>
-          <Power id={id} name={name} isPowered={wemosVal.power}></Power>
-          {wemosVal.power != 0 ? (
-            <>
-              <Colors name={name} selectedColor={wemosVal.color} />
-              <Intensity
-                id={id}
-                name={name}
-                selectedIntensity={wemosVal.intensity}
-              ></Intensity>
-              <Pulse id={id} name={name} isPulsing={wemosVal.pulse}></Pulse>
-            </>
-          ) : (
-            ""
-          )}
-        </>
-      ) : (
-        ""
-      )}
-    </Container>
-  );
+	useEffect(() => {
+		const obj = {};
+		for (let i in snapshots) {
+			if (typeof snapshots[i].key != "undefined") {
+				obj[snapshots[i].key] = snapshots[i]._node.value_;
+			}
+		}
+		setWemosVal(obj);
+	}, [snapshots]);
+	return (
+		<Container>
+			{wemosVal != null ? (
+				<>
+					<Power id={id} name={name} isPowered={wemosVal.power}></Power>
+					{wemosVal.power != 0 && wemosVal != null ? (
+						<>
+							<Colors name={name} selectedColor={wemosVal.color} />
+							<Intensity
+								id={id}
+								name={name}
+								selectedIntensity={wemosVal.intensity}
+							></Intensity>
+							<Pulse id={id} name={name} isPulsing={wemosVal.pulse}></Pulse>
+						</>
+					) : (
+						""
+					)}
+				</>
+			) : (
+				""
+			)}
+		</Container>
+	);
 };

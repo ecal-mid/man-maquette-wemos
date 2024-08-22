@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@jaames/iro": "^5.5.2",
     "babel-preset-next": "^1.4.0",
     "firebase": "^9.9.4",
     "next": "12.2.5",
