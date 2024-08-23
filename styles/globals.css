@@ -1,50 +1,99 @@
 @font-face {
-  font-family: 'riformaBold';
-  src: url('./../public/fonts/RiformaLL-Bold.otf') format('otf');
-  src: url('./../public/fonts/RiformaLL-Bold.woff') format('woff');
+	font-family: "riformaBold";
+	src: url("./../public/fonts/RiformaLL-Bold.otf") format("otf");
+	src: url("./../public/fonts/RiformaLL-Bold.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'UnicaMedium';
-  src: url('./../public/fonts/Unica77LL-Medium.otf') format('otf');
-  src: url('./../public/fonts/Unica77LL-Medium.woff') format('woff');
+	font-family: "UnicaMedium";
+	src: url("./../public/fonts/Unica77LL-Medium.otf") format("otf");
+	src: url("./../public/fonts/Unica77LL-Medium.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'UnicaBold';
-  src: url('./../public/fonts/Unica77LL-Bold.otf') format('otf');
-  src: url('./../public/fonts/Unica77LL-Bold.woff') format('woff');
+	font-family: "UnicaBold";
+	src: url("./../public/fonts/Unica77LL-Bold.otf") format("otf");
+	src: url("./../public/fonts/Unica77LL-Bold.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'RiformaHeavy';
-  src: url('./../public/fonts/RiformaLL-Medium.otf') format('otf');
-  src: url('./../public/fonts/RiformaLL-Medium.woff') format('woff');
+	font-family: "RiformaHeavy";
+	src: url("./../public/fonts/RiformaLL-Medium.otf") format("otf");
+	src: url("./../public/fonts/RiformaLL-Medium.woff") format("woff");
 }
 
 html,
 body {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 * {
-  font-family: 'UnicaBold';
-  box-sizing: border-box;
-  font-weight: unset;
+	font-family: "UnicaBold";
+	box-sizing: border-box;
+	font-weight: unset;
 }
 
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+	html {
+		color-scheme: dark;
+	}
+	body {
+		color: white;
+		background: black;
+	}
+}
+
+/* add an animation of rotation at 360 deg */
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+#handle {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #000;
+}
+
+.hue-picker {
+	width: 100% !important;
+	height: 6rem !important;
+}
+
+.react-colorful {
+	width: 100% !important;
+	border-radius: 0;
+}
+
+.react-colorful__saturation {
+	margin: 15px 0;
+	border-radius: 5px;
+	border-bottom: none;
+	display: none;
+}
+
+.react-colorful__hue {
+	height: 6rem !important;
+	order: -1;
+}
+
+.react-colorful__hue-pointer,
+.react-colorful__alpha-pointer {
+	width: 20px;
+	height: 20px;
+}
+
+.react-colorful__last-control {
+	border-radius: 0 !important;
 }

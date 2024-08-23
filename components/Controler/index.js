@@ -9,11 +9,13 @@ import { Colors } from "./Colors";
 import { useList } from "react-firebase-hooks/database";
 import { Intensity } from "./Intensity";
 import { Pulse } from "./Pulse";
+import { BoolButton } from "./BoolButton";
 
 const database = getDatabase(app);
 
 export const Controler = ({ id, name, data }) => {
 	const [wemosVal, setWemosVal] = useState(null);
+	const [seeColorModule, setSeeColorModule] = useState(false);
 	const [snapshots, loading, error] = useList(ref(database, name));
 
 	useEffect(() => {
@@ -33,6 +35,7 @@ export const Controler = ({ id, name, data }) => {
 					{wemosVal.power != 0 && wemosVal != null ? (
 						<>
 							<Colors name={name} selectedColor={wemosVal.color} />
+
 							<Intensity
 								id={id}
 								name={name}

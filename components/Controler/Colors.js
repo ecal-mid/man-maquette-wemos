@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { getColor, setColorWemos } from "../firebase";
 import iro from "@jaames/iro";
 import { set } from "firebase/database";
+import { HuePicker, SketchPicker, SliderPicker } from "react-color";
+import { HexColorPicker } from "react-colorful";
 const OuterContainer = styled.div`
-	padding-left: 5vw;
-	padding-right: 5vw;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 `;
 const Container = styled.div`
+	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: stretch;
@@ -67,9 +68,10 @@ const SelectedColContainer = styled.div`
 
 export const Colors = ({ selectedColor, name }) => {
 	console.log(selectedColor);
-	const colArr = ["red", "blue", "green", "yellow", "pink", "white", "cyan"];
 
+	const [isExpanded, setIsExpanded] = useState(false);
 	const colorPickerRef = useRef(null);
+	const [color, setColor] = useState("#aabbcc");
 
 	const sendToFirebase = (color) => {
 		if (name == "wemosadmin") {
@@ -85,7 +87,7 @@ export const Colors = ({ selectedColor, name }) => {
 	const getInitialColorValue = async () => {
 		getColor(name).then((data) => {
 			console.log(data);
-			colorPickerRef.current.color.hexString = data.color;
+			// colorPickerRef.current.color.hexString = data.color;
 		});
 	};
 
@@ -93,33 +95,34 @@ export const Colors = ({ selectedColor, name }) => {
 		if (!colorPickerRef.current) {
 			getInitialColorValue();
 
-			colorPickerRef.current = new iro.ColorPicker("#picker", {
-				width: window.innerWidth,
+			// colorPickerRef.current = new iro.ColorPicker("#picker", {
+			// 	width: window.innerWidth,
 
-				layout: [
-					{
-						component: iro.ui.Wheel,
-						options: {},
-					},
-				],
-			});
-			colorPickerRef.current.on("color:change", function (color) {
-				// log the current color as a HEX string
-				const RGBVALS = color.hexString;
-				sendToFirebase(RGBVALS);
-			});
+			// 	layout: [
+			// 		{
+			// 			component: iro.ui.Wheel,
+			// 			options: {},
+			// 		},
+			// 	],
+			// });
+			// colorPickerRef.current.on("color:change", function (color) {
+			// 	// log the current color as a HEX string
+			// 	const RGBVALS = color.hexString;
+			// 	sendToFirebase(RGBVALS);
+			// });
 		}
 	}, []);
 	window.onresize = () => {
-		if (colorPickerRef.current) {
-			console.log(window.innerWidth, colorPickerRef.current);
-			colorPickerRef.current.resize(window.innerWidth);
-		}
+		// 	if (colorPickerRef.current) {
+		// 		console.log(window.innerWidth, colorPickerRef.current);
+		// 		colorPickerRef.current.resize(window.innerWidth);
+		// 	}
 	};
 	return (
 		<OuterContainer>
-			<Container>
-				<WheelColor id="picker"></WheelColor>
+			<Container class="custom-layout">
+				<HexColorPicker color={color} onChange={setColor} />
+				{/* <WheelColor id="picker"></WheelColor> */}
 				{/* {colArr.map((color, i) => (
 					<InnerColor
 						num={i}
