@@ -74,13 +74,13 @@ a {
 .react-colorful {
 	width: 100% !important;
 	border-radius: 0;
+	height: 6rem !important;
 }
 
 .react-colorful__saturation {
-	margin: 15px 0;
-	border-radius: 5px;
+	height: 6rem;
 	border-bottom: none;
-	display: none;
+	/* display: none; */
 }
 
 .react-colorful__hue {

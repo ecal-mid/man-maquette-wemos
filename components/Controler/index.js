@@ -35,7 +35,6 @@ export const Controler = ({ id, name, data }) => {
 					{wemosVal.power != 0 && wemosVal != null ? (
 						<>
 							<Colors name={name} selectedColor={wemosVal.color} />
-
 							<Intensity
 								id={id}
 								name={name}
