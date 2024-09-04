@@ -10,6 +10,7 @@ import { useList } from "react-firebase-hooks/database";
 import { Intensity } from "./Intensity";
 import { Pulse } from "./Pulse";
 import { BoolButton } from "./BoolButton";
+import { Sphere } from "./Sphere";
 
 const database = getDatabase(app);
 
@@ -31,7 +32,7 @@ export const Controler = ({ id, name, data }) => {
 		<Container>
 			{wemosVal != null ? (
 				<>
-					<Power id={id} name={name} isPowered={wemosVal.power}></Power>
+					{/* <Power id={id} name={name} isPowered={wemosVal.power}></Power>
 					{wemosVal.power != 0 && wemosVal != null ? (
 						<>
 							<Colors name={name} selectedColor={wemosVal.color} />
@@ -44,11 +45,12 @@ export const Controler = ({ id, name, data }) => {
 						</>
 					) : (
 						""
-					)}
+					)} */}
 				</>
 			) : (
 				""
 			)}
+			<Sphere id={id} name={name} data={data}></Sphere>
 		</Container>
 	);
 };

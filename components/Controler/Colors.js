@@ -146,18 +146,6 @@ export const Colors = ({ selectedColor, name }) => {
 	};
 	return (
 		<>
-			<ButtonsContainer>
-				<BoolButton
-					isActive={colorMode.includes("RGB")}
-					infos={"RGB"}
-					callback={() => colorModeHandler("RGB")}
-				/>
-				<BoolButton
-					isActive={colorMode.includes("W")}
-					infos={"W"}
-					callback={() => colorModeHandler("W")}
-				/>
-			</ButtonsContainer>
 			<OuterContainer>
 				<Container className="custom-layout">
 					<WheelColor id="picker"></WheelColor>
@@ -178,6 +166,18 @@ export const Colors = ({ selectedColor, name }) => {
 				))} */}
 				</Container>
 			</OuterContainer>
+			<ButtonsContainer>
+				<BoolButton
+					isActive={colorMode.includes("RGB")}
+					infos={"RGB"}
+					callback={() => colorModeHandler("RGB")}
+				/>
+				<BoolButton
+					isActive={colorMode.includes("W")}
+					infos={"W"}
+					callback={() => colorModeHandler("W")}
+				/>
+			</ButtonsContainer>
 		</>
 	);
 };
