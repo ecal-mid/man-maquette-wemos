@@ -8,7 +8,7 @@ import {
 	TransformControls,
 } from "@react-three/drei";
 import { Canvas, useLoader, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {
 	TextureLoader,
@@ -16,17 +16,27 @@ import {
 	LinearFilter,
 	RGBAFormat,
 } from "three";
+import { setColorWemos } from "../firebase";
+import { set } from "firebase/database";
 
 const Container = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
 `;
 
-const ThreeFunction = () => {
-	console.log("ThreeFunction");
+let Picker = styled.div`
+	width: 100px;
+	height: 100px;
+	background-color: ${(props) => props.color};
+`;
+let color = { current: "rgba(255,255,255)", last: "rgba(255,255,255)" };
+
+const GetColorOfCanvas = ({ name }) => {
+	let time = { current: 0, last: 0 };
 	const { gl, scene, camera } = useThree();
 	const renderTarget = useRef(
 		new WebGLRenderTarget(window.innerWidth, window.innerHeight, {
@@ -37,6 +47,7 @@ const ThreeFunction = () => {
 	);
 
 	function readValue() {
+		time.current = Date.now();
 		const centerX = Math.floor(window.innerWidth / 2);
 		const centerY = Math.floor(window.innerHeight / 2);
 		const pixelBuffer = new Uint8Array(4); // Only need 4 values for one pixel (RGBA)
@@ -54,7 +65,16 @@ const ThreeFunction = () => {
 		gl.setRenderTarget(null);
 
 		const [r, g, b, a] = pixelBuffer;
-		console.log(`Central pixel color: rgba(${r}, ${g}, ${b}, ${a / 255})`); // Log the central pixel color
+		// rgba to hex conversion but 6 digits
+
+		color.current = `#${r.toString(16).padStart(2, "0")}${g
+			.toString(16)
+			.padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+		if (color.current !== color.last && time.current - time.last > 250) {
+			setColorWemos(color.current, name);
+			time.last = time.current;
+			color.last = color.current;
+		}
 		requestAnimationFrame(readValue);
 	}
 
@@ -67,37 +87,46 @@ const ThreeFunction = () => {
 
 export const Sphere = ({ id, name, data }) => {
 	console.log(id, name, data);
+	let colorBackgroun = "rgba(255,255,255)";
 
+	const [pointerIsDown, setPointerIsDown] = useState(false);
 	const canvasRef = useRef();
-	const colorMap = useLoader(TextureLoader, "/1024x1024.png");
+	const colorMap = useLoader(TextureLoader, "/2048x20489.png");
 
 	const transform = useRef();
 
 	return (
 		<Container>
 			<Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }}>
-				<ThreeFunction />
-				<color attach="background" args={["#fff"]} />
+				<GetColorOfCanvas name={name} />
+				<color attach="background" args={[color.current]} />
 
-				{/* <CameraControls /> */}
+				<PerspectiveCamera position={[0, 0, 10]} />
+				<CameraControls />
 				<ambientLight intensity={1} />
 				<directionalLight position={[10, 10, 5]} intensity={1} />
-				<PresentationControls
-					enabled={true} // the controls can be disabled by setting this to false
-					global={true} // Spin globally or by dragging the model
-					cursor={true} // Whether to toggle cursor style on drag
-					snap={false} // Snap-back to center (can also be a spring config)
-					speed={10} // Speed factor
-					zoom={3} // Zoom factor when half the polar-max is reached
-					rotation={[0, 0, 0]} // Default rotation
-					polar={[-Infinity, Infinity]} // Vertical limits
-					azimuth={[-Infinity, Infinity]} // Horizontal limits
-					config={{ mass: 1, tension: 170, friction: 26 }} // Spring config
+				<mesh
+					onPointerDown={(event) => {
+						console.log(event.pageX);
+						event.stopPropagation();
+						setPointerIsDown(true);
+					}}
+					onPointerUp={(event) => {
+						console.log(event.pageX);
+						event.stopPropagation();
+						setPointerIsDown(false);
+					}}
+					onPointerMove={(event) => {
+						if (pointerIsDown) {
+							console.log(event.pageX);
+							console.log(color);
+						}
+						event.stopPropagation();
+					}}
 				>
-					<mesh>
-						<sphereGeometry args={[2, 100, 100]} />
-						<meshBasicMaterial map={colorMap}>
-							{/* <GradientTexture
+					<sphereGeometry args={[2, 100, 100]} />
+					<meshBasicMaterial map={colorMap}>
+						{/* <GradientTexture
 							stops={[0, 0.25, 0.5, 1]} // As many stops as you want
 							colors={["white", "blue", "rgb(0,255,0)", "red"]} // Colors need to match the number of stops
 							size={1024} // Size is optional, default = 1024
@@ -106,9 +135,9 @@ export const Sphere = ({ id, name, data }) => {
 							innerCircleRadius={0} // Optional, the radius of the inner circle of the gradient, default = 0
 							outerCircleRadius={"auto"} // Optional, the radius of the outer circle of the gradient, default = auto
 						/> */}
-						</meshBasicMaterial>
-					</mesh>
-				</PresentationControls>
+					</meshBasicMaterial>
+				</mesh>
+				{/* </PresentationControls> */}
 			</Canvas>
 		</Container>
 	);
