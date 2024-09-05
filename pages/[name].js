@@ -51,7 +51,7 @@ const NamePage = () => {
 				<meta name="theme-color" content="#ffffff" />{" "}
 			</Head>
 			<Container>
-				{/* <Header name={route.query.name}></Header> */}
+				<Header name={route.query.name}></Header>
 				{nameWemos != null && nameWemos != "wemosundefined" ? (
 					<Controler id={route.query.name} name={nameWemos}></Controler>
 				) : (

@@ -32,8 +32,13 @@ export const Controler = ({ id, name, data }) => {
 		<Container>
 			{wemosVal != null ? (
 				<>
-					{/* <Power id={id} name={name} isPowered={wemosVal.power}></Power>
-					{wemosVal.power != 0 && wemosVal != null ? (
+					<Power
+						id={id}
+						name={name}
+						callback={() => {}}
+						isPowered={wemosVal.power}
+					></Power>
+					{/* {wemosVal.power != 0 && wemosVal != null ? (
 						<>
 							<Colors name={name} selectedColor={wemosVal.color} />
 							<Intensity

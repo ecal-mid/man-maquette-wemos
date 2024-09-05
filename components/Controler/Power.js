@@ -4,7 +4,10 @@ import { BoolButton } from "./BoolButton";
 const Container = styled.div``;
 
 const InnerContainer = styled.div`
+	pointer-events: none;
 	cursor: pointer;
+	position: absolute;
+	z-index: 1;
 `;
 export const Power = ({ id, name, isPowered }) => {
 	const sendToFirebase = (numAdmin) => {
@@ -43,11 +46,11 @@ export const Power = ({ id, name, isPowered }) => {
 					</InnerContainer>
 				</>
 			) : (
-				<InnerContainer onClick={() => sendToFirebase()}>
+				<InnerContainer>
 					<BoolButton
 						isActive={isPowered}
 						infos={isPowered == 1 ? "POWER OFF" : "POWER ON"}
-						callback={""}
+						callback={() => sendToFirebase()}
 					></BoolButton>
 				</InnerContainer>
 			)}
