@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
 	reactStrictMode: true,
-	swcMinify: true,
-};
-const withTM = require("next-transpile-modules")(["three"]);
+	webpack: (config, options) => {
+		config.module.rules.push({
+			test: /\.(glsl|vs|fs|vert|frag)$/,
+			use: ["raw-loader", "glslify-loader"],
+		});
 
-module.exports = { nextConfig, withTM };
+		return config;
+	},
+};

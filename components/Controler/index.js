@@ -32,12 +32,12 @@ export const Controler = ({ id, name, data }) => {
 		<Container>
 			{wemosVal != null ? (
 				<>
-					<Power
+					{/* <Power
 						id={id}
 						name={name}
 						callback={() => {}}
 						isPowered={wemosVal.power}
-					></Power>
+					></Power> */}
 					{/* {wemosVal.power != 0 && wemosVal != null ? (
 						<>
 							<Colors name={name} selectedColor={wemosVal.color} />

@@ -1,7 +1,15 @@
-import { CameraControls, PerspectiveCamera } from "@react-three/drei";
-import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import {
+	CameraControls,
+	PerspectiveCamera,
+	shaderMaterial,
+	useTexture,
+} from "@react-three/drei";
+import { Canvas, extend, useLoader, useThree } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import * as THREE from "three";
+import fragmentShader from "./shader/fragment.glsl";
+import vertexShader from "./shader/vertex.glsl";
 import {
 	TextureLoader,
 	WebGLRenderTarget,
@@ -10,6 +18,7 @@ import {
 } from "three";
 import { setColorWemos } from "../firebase";
 import { set } from "firebase/database";
+import { SphereMesh } from "./SphereMesh";
 
 const Container = styled.div`
 	width: 100%;
@@ -25,7 +34,11 @@ let Picker = styled.div`
 	height: 100px;
 	background-color: ${(props) => props.color};
 `;
-let color = { current: "rgba(255,255,255)", last: "rgba(255,255,255)" };
+let color = {
+	current: "rgba(255,255,255)",
+	last: "rgba(255,255,255)",
+	backgroundColor: "rgba(255,255,255)",
+};
 
 let pointerIsDownState = false;
 const GetColorOfCanvas = ({ name }) => {
@@ -40,6 +53,7 @@ const GetColorOfCanvas = ({ name }) => {
 	);
 
 	function readValue() {
+		console.log("readValue");
 		time.current = Date.now();
 		const centerX = Math.floor(window.innerWidth / 2);
 		const centerY = Math.floor(window.innerHeight / 2);
@@ -59,11 +73,12 @@ const GetColorOfCanvas = ({ name }) => {
 		color.current = `#${r.toString(16).padStart(2, "0")}${g
 			.toString(16)
 			.padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-		if (
-			color.current !== color.last &&
-			time.current - time.last > 250 &&
-			pointerIsDownState
-		) {
+		color.backgroundColor = `#${Math.max(r, 20)
+			.toString(16)
+			.padStart(2, "0")}${Math.max(g, 20)
+			.toString(16)
+			.padStart(2, "0")}${Math.max(b, 20).toString(16).padStart(2, "0")}`;
+		if (color.current !== color.last && time.current - time.last > 0) {
 			if (color.current == "#ffffff") {
 				setColorWemos("#ffffffff", name);
 			} else {
@@ -85,6 +100,7 @@ const GetColorOfCanvas = ({ name }) => {
 export const Sphere = ({ id, name, data }) => {
 	const canvasRef = useRef();
 	const colorMap = useLoader(TextureLoader, "/2048x20489.png");
+
 	return (
 		<Container>
 			<Canvas
@@ -98,7 +114,7 @@ export const Sphere = ({ id, name, data }) => {
 				}}
 			>
 				<GetColorOfCanvas name={name} />
-				<color attach="background" args={[color.current]} />
+				<color attach="background" args={[color.backgroundColor]} />
 
 				<PerspectiveCamera position={[0, 0, 10]} />
 				<CameraControls
@@ -109,10 +125,7 @@ export const Sphere = ({ id, name, data }) => {
 				/>
 				<ambientLight intensity={1} />
 				<directionalLight position={[10, 10, 5]} intensity={1} />
-				<mesh>
-					<sphereGeometry args={[2, 100, 100]} />
-					<meshBasicMaterial map={colorMap}></meshBasicMaterial>
-				</mesh>
+				<SphereMesh></SphereMesh>
 			</Canvas>
 		</Container>
 	);
