@@ -6,7 +6,8 @@ const Container = styled.div`
 	position: absolute;
 	padding: 1rem;
 	padding-top: 1.5rem;
-	grid-template-columns: auto 1fr;
+	grid-template-columns: 1fr;
+	width: 100%;
 	h1 {
 		cursor: pointer;
 		margin: 0;
@@ -21,7 +22,10 @@ const Container = styled.div`
 	}
 `;
 
-const InnerContainerTitle = styled.div``;
+const InnerContainerTitle = styled.div`
+	display: flex;
+	justify-content: center;
+`;
 const InnerContainer = styled.div`
 	display: flex;
 	align-items: center;
@@ -35,7 +39,11 @@ export const Header = ({ name }) => {
 				<>
 					<InnerContainerTitle>
 						<Link href="/">
-							{name == "admin" ? <h1>MASTER</h1> : <h1>WEMOS {name}</h1>}
+							{name == "admin" ? (
+								<h1>LIGHT'S BOUQUET</h1>
+							) : (
+								<h1>WEMOS {name}</h1>
+							)}
 						</Link>
 					</InnerContainerTitle>
 				</>

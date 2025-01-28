@@ -17,6 +17,12 @@
 }
 
 @font-face {
+	font-family: "roundedGotham";
+	src: url("./../public/fonts/GothamRnd-Bold.otf") format("otf");
+	src: url("./../public/fonts/GothamRnd-Bold.woff") format("woff");
+}
+
+@font-face {
 	font-family: "RiformaHeavy";
 	src: url("./../public/fonts/RiformaLL-Medium.otf") format("otf");
 	src: url("./../public/fonts/RiformaLL-Medium.woff") format("woff");
@@ -34,7 +40,7 @@ a {
 }
 
 * {
-	font-family: "UnicaBold";
+	font-family: "RiformaHeavy", sans-serif;
 	box-sizing: border-box;
 	font-weight: unset;
 }
@@ -97,6 +103,7 @@ a {
 .react-colorful__last-control {
 	border-radius: 0 !important;
 }
+
 /* 
 canvas {
 	width: 100% !important;

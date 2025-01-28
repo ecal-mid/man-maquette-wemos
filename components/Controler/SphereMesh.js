@@ -12,6 +12,7 @@ import vertexShader from "./shader/vertex.glsl";
 import { shaderMaterial, useTexture } from "@react-three/drei";
 import { useControls } from "leva";
 import { a, useSpring, useSpringValue } from "@react-spring/three";
+import { map } from "../utils";
 const ImageRevealMaterial = shaderMaterial(
 	{
 		uTexture: new THREE.Texture(),
@@ -28,14 +29,19 @@ const ImageRevealMaterial = shaderMaterial(
 
 extend({ ImageRevealMaterial });
 
-export const SphereMesh = ({ id, name, data }) => {
+export const SphereMesh = ({ id, name, data, _callback }) => {
+	const scaleSize = {
+		max: map(window.innerWidth, 380, 2000, 0.5, 1.0),
+		min: map(window.innerHeight, 380, 2000, 0.1, 0.5),
+	};
+
 	const materialRef = useRef();
 	const [lightIsOnState, setLightIsOnState] = useState(0);
 
 	const [{ x }] = useSpring(
 		{
 			x: lightIsOnState,
-			config: { mass: 10, tension: 100, friction: 50, precision: 0.0001 },
+			config: { mass: 10, tension: 500, friction: 100, precision: 0.0001 },
 		},
 		[lightIsOnState]
 	);
@@ -43,7 +49,7 @@ export const SphereMesh = ({ id, name, data }) => {
 	const [{ l }] = useSpring(
 		{
 			l: lightIsOnState,
-			config: { mass: 5, tension: 100, friction: 50, precision: 0.0001 },
+			config: { mass: 2, tension: 500, friction: 50, precision: 0.0001 },
 		},
 		[lightIsOnState]
 	);
@@ -60,7 +66,7 @@ export const SphereMesh = ({ id, name, data }) => {
 		}
 	});
 
-	const scale = x.to([0, 1], [0.5, 1.0]);
+	const scale = x.to([0, 1], [scaleSize.min, scaleSize.max]);
 	const light = l.to([0, 1], [1.2, -0.3]);
 
 	function onClickHandler() {
