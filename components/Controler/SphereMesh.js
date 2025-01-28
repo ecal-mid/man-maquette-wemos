@@ -31,8 +31,8 @@ extend({ ImageRevealMaterial });
 
 export const SphereMesh = ({ id, name, data, _callback }) => {
 	const scaleSize = {
-		max: map(window.innerWidth, 380, 2000, 0.5, 1.0),
-		min: map(window.innerHeight, 380, 2000, 0.1, 0.5),
+		max: map(window.innerWidth, 380, 2000, 0.7, 1.0),
+		min: map(window.innerHeight, 380, 2000, 0.2, 0.5),
 	};
 
 	const materialRef = useRef();
@@ -49,7 +49,7 @@ export const SphereMesh = ({ id, name, data, _callback }) => {
 	const [{ l }] = useSpring(
 		{
 			l: lightIsOnState,
-			config: { mass: 2, tension: 500, friction: 50, precision: 0.0001 },
+			config: { mass: 2, tension: 75, friction: 50, precision: 0.0001 },
 		},
 		[lightIsOnState]
 	);

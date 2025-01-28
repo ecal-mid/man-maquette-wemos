@@ -53,7 +53,6 @@ const GetColorOfCanvas = ({ name }) => {
 	);
 
 	function readValue() {
-		console.log("readValue");
 		time.current = Date.now();
 		const centerX = Math.floor(window.innerWidth / 2);
 		const centerY = Math.floor(window.innerHeight / 2);
