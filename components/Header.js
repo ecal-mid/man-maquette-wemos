@@ -6,12 +6,13 @@ const Container = styled.div`
 	position: absolute;
 	padding: 1rem;
 	padding-top: 1.5rem;
+	bottom: 0;
 	grid-template-columns: 1fr;
 	width: 100%;
 	h1 {
 		cursor: pointer;
 		margin: 0;
-		font-size: 1rem;
+		font-size: 0.8rem;
 		line-height: 100%;
 		text-align: left;
 	}
@@ -40,7 +41,7 @@ export const Header = ({ name }) => {
 					<InnerContainerTitle>
 						<Link href="/">
 							{name == "admin" ? (
-								<h1>LIGHT'S BOUQUET</h1>
+								<h1>LIGHT&apos;S BOUQUET CONTROLLER</h1>
 							) : (
 								<h1>WEMOS {name}</h1>
 							)}
